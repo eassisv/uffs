@@ -1,0 +1,5 @@
+# Ignorar binário de compilação
+*.out
+# Ignorar pasta de backup do python
+__pycache__/
+teste.py
