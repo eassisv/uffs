@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import socket
 from threading import Thread
 from time import sleep
@@ -28,6 +30,7 @@ def sender():
 def receiver(running):
     while running:
         sock = socket.socket()
+        sock.close()
         sock.settimeout(5)
         sock.bind((address, port))
         sock.listen(10)
