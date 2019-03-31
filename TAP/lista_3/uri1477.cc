@@ -10,7 +10,7 @@ struct Node {
     Node(): x(0), y(0), z(0) {}
     Node(int _x, int _y, int _z): x(_x), y(_y), z(_z) {}
     Node(int i) { 
-        x = !i; y = (i == 1); z = (i == 2);
+        x = !i; y = (i % 3 == 1); z = (i % 3 == 2);
     }
     Node operator >> (const int i) const {
         if (!(i % 3)) return Node(x, y, z);
@@ -23,10 +23,10 @@ struct Node {
 };
 
 Node st[4 * MAX];
-int lazy[4 * MAX], ps[MAX];
+int lazy[4 * MAX];
 
 Node build(int p, int l, int r) {
-    if (l == r) return st[p] = Node(ps[l]);
+    if (l == r) return st[p] = Node(0);
     int m = (l + r) >> 1;
     return st[p] = build(left(p), l, m) + build(right(p), m + 1, r);
 }
@@ -36,8 +36,6 @@ Node update(int p, int l, int r, int i, int j) {
         if (l != r) {
             lazy[left(p)] += lazy[p];
             lazy[right(p)] += lazy[p];
-        } else {
-            ps[l] += lazy[p];
         }
         st[p] = st[p] >> lazy[p];
         lazy[p] = 0;
@@ -47,8 +45,6 @@ Node update(int p, int l, int r, int i, int j) {
         if (l != r) {
             lazy[left(p)]++;
             lazy[right(p)]++;
-        } else {
-            ps[l] = (ps[l] + lazy[p]) % 3;
         }
         return st[p] = st[p] >> 1;
     }
@@ -78,7 +74,6 @@ int main(void) {
     while (scanf("%d %d", &n, &m) != EOF) {
         memset(lazy, 0, sizeof(lazy));
         memset(st, 0, sizeof(st));
-        memset(ps, 0, sizeof(ps));
         build(1, 0, n - 1);
         for (int i = 0; i < m; ++i) {
             scanf(" %c %d %d", &op, &a, &b);
