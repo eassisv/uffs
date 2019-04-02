@@ -4,7 +4,6 @@ import socket
 from threading import Thread
 from time import sleep, time
 from secrets import randbits
-from Crypto.Cipher import AES
 import sys
 
 running = True
