@@ -30,6 +30,7 @@ int main(void) {
         scanf("%d %d", &x, &y);
         ns[i] = mp(min(x, y), max(x, y));
     }
+    sort(ns, ns + n);
     memset(memo, -1, sizeof(memo));
     printf("%d\n", solve(0, 0));
     return 0;
