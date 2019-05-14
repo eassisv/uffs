@@ -18,7 +18,6 @@ neighbors = set()
 
 def broadcast(msg):
     ng = []
-    print('msg {}'.format(msg))
     for i in range(1, len(configs)):
         sock = socket.socket()
         sock.settimeout(5)
@@ -56,35 +55,42 @@ def receiver(my_config):
     sock.listen(10)
     vector[my_id] = {}
     ng = set()
+    global neighbors
     while running:
         try:
             conn, _ = sock.accept()
         except socket.timeout:
             continue
         data = loads(conn.recv(1024))
-        print('Data {}'.format(data.keys()[0]))
-        if len(data.items()) == 1:
+        v = data.copy().popitem()
+        print('data depois do bagulho', data)
+        if v[0] == 1:
             # Recebendo do general
-            if data.get(1) != None:
-                vector[my_id] = data
-                broadcast({my_id: data[1]})
-            else:
-                ng |= set(list(data.keys()))
-                print(ng)
-                vector[my_id].update(data)
-                print(vector)
-        else:
+            vector[my_id] = data
+            broadcast({my_id: data[1]})
+        elif type(v[1]) is str:
+            ng |= set(list(data.keys()))
+            vector[my_id].update(data)
+            if ng == neighbors:
+                ng = set()
+                print('Mandando ver')
+                broadcast(vector)
+        elif type(v[1]) is dict:
+            print("ABACAXI")
+            print('Recebi vetor de {} = {}'.format(v[0], v[1]))
             # Recebendo os vetores
             vector.update(data)
-            ng |= set(data.keys())
-            print(vector)
-            print('no else, ng', ng)
+            ng |= set(list(data.keys()))
             if ng == neighbors:
+                # ver qual é o faulty
                 print('Acabou')
+                print("-"*30)
+                print(vector)
                 break
-        if ng == neighbors:
-            print('Mandando ver')
-            broadcast(vector)
+
+        print(vector)
+        print(ng)
+        print(neighbors)
 
         conn.shutdown(socket.SHUT_RDWR)
         conn.close()
@@ -105,18 +111,19 @@ def read_configs():
 
 
 def start_threads():
-    rec = Thread(target=receiver, name='receiver', args=(my_config, ))
     if my_id == 1:
         send = Thread(target=sender_general, name='sender')
         send.start()
         send.join()
-    try:
-        rec.start()
-        rec.join()
-    except KeyboardInterrupt:
-        print('\r\rSaindo...')
-        global running
-        running = False
+    else:
+        try:
+            rec = Thread(target=receiver, name='receiver', args=(my_config, ))
+            rec.start()
+            rec.join()
+        except KeyboardInterrupt:
+            print('\r\rSaindo...')
+            global running
+            running = False
 
 
 if __name__ == '__main__':
@@ -130,10 +137,10 @@ if __name__ == '__main__':
         faulty = True if sys.argv[2] == 'faulty' else False
     except IndexError:
         faulty = False
-    # except:
-    #     print('Execute o programa com o padrão {} <id>'.
-    #           format(sys.argv[0]))
-    #     sys.exit(0)
+    except:
+        print('Execute o programa com o padrão {} <id>'.
+              format(sys.argv[0]))
+        sys.exit(0)
 
     print('Digite "sair" para encerrar')
 
