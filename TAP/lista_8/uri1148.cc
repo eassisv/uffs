@@ -7,7 +7,7 @@ using namespace std;
 #define INF 112345678
 
 int n, e, k;
-int adj[MAX][MAX], dist[MAX][MAX];
+int dist[MAX][MAX];
 
 void floyd_warshall() {
   int u, v, w;
