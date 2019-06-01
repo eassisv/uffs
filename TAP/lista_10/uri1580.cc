@@ -17,12 +17,12 @@ ll fib(ll n) {
   return memo[n] = (n * fib(n - 1)) % M;
 }
 
-ll bbin(ll a, ll n) {
+ll expbin(ll a, ll n) {
   if (!n)
     return 1L;
   if (n & 1L)
-    return a * bbin(a, n - 1) % M;
-  ll tmp = bbin(a, n >> 1);
+    return a * expbin(a, n - 1) % M;
+  ll tmp = expbin(a, n >> 1);
   return tmp * tmp % M;
 }
 
@@ -37,7 +37,7 @@ int main(void) {
       n = fib(len); b = 1; len = 0;
       for (int i = 0; i < MAXC; i++)
         b = fib(count[i]) * b % M;
-      printf("%lld\n", n * bbin(b, M - 2) % M);
+      printf("%lld\n", n * expbin(b, M - 2) % M);
       memset(count, 0, sizeof(count));
       continue;
     }
