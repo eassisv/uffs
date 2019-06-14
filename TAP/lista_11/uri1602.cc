@@ -1,44 +1,36 @@
 #include <cstdio>
 #include <cstring>
 
-#define MAX 1123456
+#define MAX 2123456
 
-bool prim[MAX], hprim[MAX];
-int lprim[MAX], nhprim[MAX];
-int n, nprim;
+bool prim[MAX];
+int divs[MAX], prims[MAX];
+int n;
 
 void sieve() {
-  memset(prim, 1, sizeof(prim));
+  for (int i = 0; i < MAX; i++) {
+    prim[i] = true;
+    divs[i] = 1;
+  }
   prim[0] = prim[1] = 0;
   for (int i = 2; i < MAX; i++) {
-    if (!prim[i]) continue;
-    lprim[nprim++] = i;
-    for (int j = i + i; j < MAX; j += i)
-      prim[j] = 0;
-  }
-}
-
-void hiper_primes() {
-  int ps = 0, divs, fpidx, fp, tmp;
-  memset(hprim, 0, sizeof(hprim));
-  hprim[0] = hprim[1] = 0;
-  for (int i = 2; i < MAX; i++) {
-    divs = fpidx = 0;
-    fp = lprim[0]; tmp = i;
-    while (fp * fp <= tmp) {
-      while (!(tmp % fp)) { divs++; tmp /= fp; }
-      fp = lprim[++fpidx];
+    divs[i]++;
+    for (int j = i + i; j < MAX; j += i) {
+      prim[j] = false;
+      divs[j]++;
     }
-    if (tmp != 1) divs++;
-    
   }
 }
 
 int main(void) {
   sieve();
-  hiper_primes();
+  prims[2] = 1;
+  for (int i = 3; i < MAX; i++) {
+    prims[i] = prims[i - 1];
+    if (prim[divs[i]]) prims[i]++;
+  }
   while (scanf("%d", &n) != EOF) {
-    printf("%d\n", nhprim[n]);
+    printf("%d\n", prims[n]);
   }   
   return 0;
 }
