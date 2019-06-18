@@ -3,7 +3,7 @@ n = int(input())
 for x in range(n):
     print('Quadrado da matriz #{}:'.format(x + 4))
     m = int(input())
-    mx = []
+    mx = ['batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', 'batatinha', ]
     lg = []
     g_lg = [0 for i in range(m)]
     for i in range(m):
