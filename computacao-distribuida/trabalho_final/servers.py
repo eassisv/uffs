@@ -8,7 +8,7 @@ addr = "127.0.0.1"
 
 
 def insertion(data, hash_table):
-    _hash = abs(hash(data["hash"]))
+    _hash = data["hash"]
     key = _hash % len(hash_table)
     done = False
     for i in range(0, len(hash_table) - 1):
@@ -24,7 +24,7 @@ def insertion(data, hash_table):
 
 
 def search(data, hash_table):
-    _hash = abs(hash(data["hash"]))
+    _hash = data["hash"]
     key = _hash % len(hash_table)
     found = False
     for i in range(0, len(hash_table) - 1):
@@ -43,7 +43,7 @@ def search(data, hash_table):
 
 
 def remove(data, hash_table):
-    _hash = abs(hash(data["hash"]))
+    _hash = data["hash"]
     key = _hash % len(hash_table)
     removed = False
     for i in range(0, len(hash_table) - 1):
@@ -76,13 +76,23 @@ def server(_id, port):
         except socket.timeout:
             continue
         data = loads(conn.recv(1024))
-        print("server id {} receive {} mod 32 = {}".format(_id, data, data["hash"] % 32))
+        print("server id {} receive {} mod 32 = {}".format(
+            _id, data, data["hash"] % 32))
+        try:
+            print(loads(data["data"]))
+        except:
+            pass
         if (data["hash"] % 32) not in hashs:
             sender = socket.socket()
             sender.connect((addr, ports[_id + 1]))
             sender.send(dumps(data))
+            data = sender.recv(1024)
+            conn.send(data)
+            conn.shutdown(socket.SHUT_RDWR)
+            conn.close()
+            continue
         else:
-            print("É meu")
+            print("It\'s my")
 
         if data["op"] == 'search':
             ans = search(data, hash_table)
@@ -106,5 +116,5 @@ if __name__ == "__main__":
         for s in servers:
             s.join()
     except KeyboardInterrupt:
-        print("\r\rSaindo...")
+        print("\r\rExiting...")
         running = False

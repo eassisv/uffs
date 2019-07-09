@@ -28,6 +28,19 @@ class Board:
             return True
         return False
 
+    def update(self, line, idx):
+        for i, l in zip(range(self.lines), line):
+            self.board[idx][i] = l
+
+    def shot(self, x, y):
+        if 0 <= x < self.cols and 0 <= y < self.lines:
+            if self.board[y][x] == self.water:
+                self.board[y][x] = self.hit_water
+            else:
+                self.board[y][x] = self.crashed_boat
+            return True
+        else:
+            return False
 
     def insert(self, size, x, y, horizon):
         x, y = x - 1, y - 1

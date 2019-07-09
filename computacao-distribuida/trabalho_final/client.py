@@ -1,7 +1,7 @@
 import socket, os
 from pickle import loads, dumps
 
-PYTHONHASHSEED = 0
+# export PYTHONHASHSEED
 
 if __name__ == "__main__":
     while True:
