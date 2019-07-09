@@ -1,3 +1,4 @@
+import os
 import sys
 import socket
 from pickle import loads, dumps
@@ -5,36 +6,18 @@ from board import Board
 from threading import Thread
 
 vector = [0, 0]
-lines = 10
-cols = 15
+lines = 5
+cols = 5
 myboard = Board(cols, lines)
 enemyboard = Board(cols, lines)
 myview = Board(cols, lines)
-ship_size = 5
-boat_size = 2
+ship_size = 3
+boat_size = 1
 ships = 1
-boats = 1
+boats = 2
 ports = [25010, 25011]
 dht_addr = ("127.0.0.1", 25001)
 running = True
-
-for i, size, printf in zip((ships, boats), \
-    (ship_size, boat_size), ("Ships", "Boats")):
-    print(printf)
-    for j in range(i):
-        try:
-            while True:
-                print("x y horizontal?")
-                x, y, horizon = map(int, input().split())
-                if myboard.insert(size, x, y, horizon):
-                    break
-                else:
-                    print("Invalid value, try again")
-        except ValueError:
-            print('Write 3 numbers exactly')
-
-_id = int(sys.argv[1])
-mytime = False
 
 def send_board():
     for i, line in zip(range(lines), enemyboard.board):
@@ -48,7 +31,7 @@ def send_board():
             sys.exit(0)
 
 def load_view():
-    print("Loaing view...")
+    print("Loading view...")
     for i in range(lines):
         sock = socket.socket()
         sock.connect(dht_addr)
@@ -68,13 +51,10 @@ def erase():
         sock.connect(dht_addr)
         sock.send(dumps({"op": "delete", "hash": abs(hash(str(i)))}))
         data = loads(sock.recv(1024))
-        if not data["removed"]:
-            print("Problems with DHT")
-            sys.exit(0)
 
 def shot_coord():
-    x = int(input('x: '))
-    y = int(input('y: '))
+    y = int(input('Line: '))
+    x = int(input('Column: '))
     return (x, y)
 
 def update_clock():
@@ -97,6 +77,7 @@ def loop():
     sock.bind(("127.0.0.1", ports[_id - 1]))
     sock.settimeout(5)
     sock.listen(10)
+    if _id == 2: print("Playing\n")
     while running:
         try:
             conn, _ = sock.accept()
@@ -105,6 +86,7 @@ def loop():
         data = loads(conn.recv(1024))
         conn.shutdown(socket.SHUT_RDWR)
         conn.close()
+        load_view()
         if data["winner"]:
             print("Winner!")
             sys.exit(0)
@@ -114,21 +96,48 @@ def loop():
             print(vector)
             print("Little Thief...")
             sys.exit(0)
-        load_view()
         shot = loads(data["shot"])
-        enemyboard.shot(shot[0], shot[1])
+        x, y = shot[0] - 1, shot[1] - 1
+        if myboard.shot(x, y):
+            enemyboard.board[y][x] = '#'
+        else:
+            enemyboard.board[y][x] = 'o'
         winner = verify_winner()
         send_board()
-        data = dumps({"shot": dumps(shot_coord()), "vector": dumps(vector), "winner": winner})
+        data = dumps({"shot": dumps(shot_coord() if not winner else (0, 0)), "vector": dumps(vector), "winner": winner})
         sender = socket.socket()
         sender.connect(("127.0.0.1", ports[0 if _id == 2 else 1]))
-        sock.send(data)
+        sender.send(data)
         if winner:
             print("Enemy Win...")
             sys.exit(0)
 
+os.system('clear')
+for i, size, printf in zip((ships, boats), \
+    (ship_size, boat_size), ("Ships", "Boats")):
+    for j in range(i):
+        while True:
+            try:
+                print(printf, ' (size {})'.format(size))
+                y = int(input('Line: ')) - 1
+                x = int(input('Column: ')) - 1
+                horizon = int(input('Horizontal? (No[0]): '))
+                if myboard.insert(size, x, y, horizon):
+                    break
+                else:
+                    print("Invalid value, try again")
+            except ValueError:
+                print('Write 3 numbers exactly')
+
+os.system('clear')
+
+_id = int(sys.argv[1])
+mytime = False
+
 if _id == 1:
+    erase()
     send_board()
+    print("Playing\n")
     sock = socket.socket()
     sock.connect(("127.0.0.1", ports[0 if _id == 2 else 1]))
     update_clock()
