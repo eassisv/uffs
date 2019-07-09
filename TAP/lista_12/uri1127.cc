@@ -57,16 +57,11 @@ int main(void) {
       for (int i = 0; i < s; i++) {
         scanf(" %s", note);
         v = val(string{note});
-        if (i) {
-          w[i - 1] = (v - p + 12) % 12;
-        }
+        if (i) w[i - 1] = (v - p + 12) % 12;
         p = v;
       }
     }
-    m--; t--;
-    // for (int i = 0; i < m; i++) printf("%d ", ms[i]); puts("");
-    // for (int i = 0; i < t; i++) printf("%d ", ts[i]); puts("");
-    kmpre();
+    m--; t--; kmpre();
     printf("%c\n", kmp() ? 'S' : 'N');
   } 
   return 0;
