@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Adicionar Pedido{% endblock %}
+{% block nav %}
+<nav class="navbar">
+    <ul>
+        <li class="navbar__item"><a href="#">Principal</a></li>
+        <li class="navbar__item"><a href="{{ url_for('products.index') }}">Produtos</a></li>
+        <li class="navbar__item selected"><a href="{{ url_for('orders.index') }}">Pedidos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('clients.index') }}">Clientes</a></li>
+        <li class="navbar__item"><a href="#">Financeiro</a></li>
+        <li class="navbar__item"><a href="#">Administrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+{% block header %}Adicionar Pedido{% endblock %}
+{% block main %}
+<section class="main-section">
+    {% for message in get_flashed_messages(): %}
+    <div>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <div class="main-section__scrollable">
+        <header>
+            <h4>
+                Selecione o Cliente:
+            </h4>
+        </header>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form id="client" action="{{ url_for('orders.order_add') }}" method="get">
+                    {% for client in clients: %}
+                    <tr class="select" id="{{ client.id }}">
+                        <td>
+                            <input value="{{ client.id }}" type="radio" name="client" {% if client.id==1: %}checked{% endif %} />
+                        </td>
+                        <td>{{ client.id }}</td>
+                        <td>{{ client.name }}</td>
+                        <td>{{ client.address }}</td>
+                        <td>{{ client.email }}</td>
+                        <td>{{ client.phone }}</td>
+                    </tr>
+                    {% endfor %}
+                </form>
+            </tbody>
+        </table>
+    </div>
+    <div class="main-section__action-buttons">
+        <div>
+            <button type="submit" form="client" tabindex="1">Confirmar</button>
+        </div>
+        <a class="button danger" href="{{ url_for('orders.index') }}" tabindex="14">Voltar</a>
+    </div>
+</section> {% endblock %}

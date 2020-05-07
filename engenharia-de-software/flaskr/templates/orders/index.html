@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Lista de Pedidos{% endblock %}
+{% block nav %}
+<nav class="navbar">
+    <ul>
+        <li class="navbar__item"><a href="#">Principal</a></li>
+        <li class="navbar__item"><a href="{{ url_for('products.index') }}">Produtos</a></li>
+        <li class="navbar__item selected"><a href="{{ url_for('orders.index') }}">Pedidos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('clients.index') }}">Clientes</a></li>
+        <li class="navbar__item"><a href="#">Financeiro</a></li>
+        <li class="navbar__item"><a href="#">Administrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+{% block header %}Pedidos{% endblock %}
+{% block main %}
+
+{% for message in get_flashed_messages(): %}
+<div class="error-info">
+    {{ message }}
+</div>
+{% endfor %}
+
+<section class="main-section">
+    <header class="main-section__header">
+        <nav class="main-section__action">
+            <a class="btn-primary" href="{{ url_for('orders.order_add') }}">Adicionar</a>
+            <a class="btn-secondary" href="#">Detalhes</a>
+            <a class="btn-secondary" href="#">Editar</a>
+        </nav>
+        <div class="main-section__search">
+            <div>
+                <input type="search" />
+                <select>
+                    <option>Código</option>
+                    <option>Nome</option>
+                    <option>Marca</option>
+                </select>
+                <button>Buscar</button>
+            </div>
+        </div>
+    </header>
+    <div class="main-section__scrollable">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Preço Total</th>
+                    <th>Data da Venda</th>
+                    <th>Data da Entrega</th>
+                    <th>Código de Cliente</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders: %}
+                <tr>
+                    <td><input type="radio" name="selected" /></td>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>{{ order.sale_date }}</td>
+                    <td>{{ order.delivery_date }}</td>
+                    <td>{{ order.client_id }}</td>
+                    <td>{{ order.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

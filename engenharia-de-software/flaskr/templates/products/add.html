@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Adicionar Produto{% endblock %}
+{% block nav %}
+<nav class="navbar">
+    <ul>
+        <li class="navbar__item"><a href="#">Principal</a></li>
+        <li class="navbar__item selected"><a href="{{ url_for('products.index') }}">Produtos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('orders.index') }}">Pedidos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('clients.index') }}">Clientes</a></li>
+        <li class="navbar__item"><a href="#">Financeiro</a></li>
+        <li class="navbar__item"><a href="#">Administrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+{% block header %}Adicionar Produto{% endblock %}
+{% block main %}
+<section class="main-section">
+    <form action="{{ url_for('products.product_add') }}" method="post" id="form_produto">
+        <div class="main-section__option">
+            <div class="main-section__radio">
+                <label for="lot">Lote</label>
+                <input type="radio" id="lot" name="type" value="lot" tabindex="1" disabled />
+                <label for="product">Produto</label>
+                <input type="radio" checked id="product" name="type" value="product" tabindex="2" />
+            </div>
+            <div class="main-section__search">
+                <div>
+                    <input type="search" placeholder="Buscar Produto..." tabindex="3" />
+                    <button>Buscar</button>
+                </div>
+            </div>
+        </div>
+        <fieldset>
+            <legend>Informações do Produto</legend>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="code">Código:</label>
+                    <input type="number" name="code" value="{{ code }}" readonly required />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="name">Nome:</label>
+                    <input type="text" name="name" autofocus tabindex="4" required />
+                </div>
+                <div class="form-col-1">
+                    <label for="brand">Marca:</label>
+                    <select name="brand" tabindex="5">
+                        {% for brand in brands:%}
+                        <option value="{{ brand.id }}">{{ brand.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-2">
+                    <label for="description">Descrição:</label>
+                    <input type="text" name="description" tabindex="6" required />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="price">Valor para venda:</label>
+                    <input type="number" name="price" min="0.00" step="0.10" tabindex="7" required />
+                </div>
+                <div class="form-col-1">
+                    <label for="stock">Quantidade em estoque:</label>
+                    <input type="number" name="stock" min="0" value="{% if qtd_estoque%}{{ qtd_estoque }}{% else %}{{ 0 }}{% endif %}" readonly />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="min_quantity">Quantidade mínima:</label>
+                    <input type="number" name="min_quantity" min="0" tabindex="8" required />
+                </div>
+                <div class="form-col-1">
+                    <label for="actived">Produto ativo</label>
+                    <input type="checkbox" name="actived" checked tabindex="9" />
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Informações do Lote</legend>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="lot">Número do Lote:</label>
+                    <input type="number" name="lot" value="{{ lot }}" readonly required />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="valida  ty">Data de validade:</label>
+                    <input type="date" name="validaty" min="{{ min_date }}" value="{{ min_date }}" tabindex="10" />
+                </div>
+                <div class="form-col-1">
+                    <label for="lot_quantity">Quantidade de produtos no lote:</label>
+                    <input type="number" name="lot_quantity" tabindex="11" required />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-col-1">
+                    <label for="purchase_price">Preço de compra:</label>
+                    <input type="number" name="purchase_price" step="0.10" tabindex="12" required />
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+    <div class="main-section__action-buttons">
+        <div>
+            <button type="submit" form="form_produto" value="submit" tabindex="13">Confirmar</button>
+        </div>
+        <a class="button danger" href="{{ url_for('products.index') }}" tabindex="14">Voltar</a>
+    </div>
+</section>
+{% endblock %}

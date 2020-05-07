@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Adicionar Pedido{% endblock %}
+{% block nav %}
+<nav class="navbar">
+    <ul>
+        <li class="navbar__item"><a href="#">Principal</a></li>
+        <li class="navbar__item"><a href="{{ url_for('products.index') }}">Produtos</a></li>
+        <li class="navbar__item selected"><a href="{{ url_for('orders.index') }}">Pedidos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('clients.index') }}">Clientes</a></li>
+        <li class="navbar__item"><a href="#">Financeiro</a></li>
+        <li class="navbar__item"><a href="#">Administrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+{% block header %}Adicionar Pedido{% endblock %}
+{% block main %}
+<section class="main-section">
+    <header>
+        <h4>
+            Selecione os Produtos:
+        </h4>
+    </header>
+    <div class="main-section__scrollable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Marca</th>
+                    <th>Preço</th>
+                    <th>Quantidade em Estoque</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for product in products: %}
+                <tr id="{{ product.id }}">
+                    <td name="id">{{ product.id }}</td>
+                    <td name="name">{{ product.name }}</td>
+                    <td name="desc">{{ product.description }}</td>
+                    <td name="brand">{{ product.brands.name }}</td>
+                    <td name="price" class="phone">R$ {{ product.sale_price }}</td>
+                    <td name="tt_qtt">{{ product.total_quantity }}</td>
+                    <td><button class="main-section__add-button" value="{{ product.id }}">adicionar</button> </td>
+                </tr> {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="form-row">
+        <div class="form-col-1">
+            <input id="qtd_item" type="number" step="1" min="1" autofocus />
+        </div>
+        <input id="nxt_item" type="hidden" value="1" />
+    </div>
+    <form id="products" action="{{ url_for('orders.order_add') }}" method="post">
+        <input type="hidden" name="client" value="{{ client }}" />
+        <div class="main-section__scrollable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Marca</th>
+                        <th>Preço do Produto</th>
+                        <th>Quantidade</th>
+                        <th>Preço do Item</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="product-list">
+                </tbody>
+            </table>
+        </div>
+        <div class="form-row">
+            <div class="form-col-1">
+                <label for="order_total">Preço Total</label>
+                <input type="number" readonly id="order_total" value="0.00" step="0.01" />
+            </div>
+            <div class="form-col-1">
+                <lable for="delivery_date">Data de Entrega</lable>
+                <input type="date" name="delivery_date" min="{{ min_date }}" value="{{ min_date }}" required />
+            </div>
+        </div>
+    </form>
+
+    <div class="main-section__action-buttons">
+        <div class="form-col-1">
+            <div>
+                <button type="submit" form="products" tabindex="1">Confirmar</button>
+            </div>
+            <a class="button danger" href="{{ url_for('orders.order_add') }}" tabindex="14">Voltar</a>
+        </div>
+    </div>
+</section> {% endblock %}

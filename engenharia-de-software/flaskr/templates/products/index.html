@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Lista de Produtos{% endblock %}
+{% block nav %}
+<nav class="navbar">
+    <ul>
+        <li class="navbar__item"><a href="#">Principal</a></li>
+        <li class="navbar__item selected"><a href="{{ url_for('products.index') }}">Produtos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('orders.index') }}">Pedidos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('clients.index') }}">Clientes</a></li>
+        <li class="navbar__item"><a href="#">Financeiro</a></li>
+        <li class="navbar__item"><a href="#">Administrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+{% block header %}Produtos{% endblock %}
+{% block main %}
+<section class="main-section">
+    <header class="main-section__header">
+        <nav class="main-section__action">
+            <a class="btn-primary" href="{{ url_for('products.product_add') }}">Adicionar</a>
+            <a class="btn-secondary" href="#">Detalhes</a>
+            <a class="btn-secondary" href="#">Editar</a>
+            <a class="btn-danger" href="#">Disabilitar</a>
+        </nav>
+        <div class="main-section__search">
+            <div>
+                <input type="search" />
+                <select>
+                    <option>Código</option>
+                    <option>Nome</option>
+                    <option>Marca</option>
+                </select>
+                <button>Buscar</button>
+            </div>
+        </div>
+    </header>
+    <div class="main-section__scrollable">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Marca</th>
+                    <th>Quantidade no Estoque</th>
+                    <th>Preço de Venda</th>
+                    <th>Ativo?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products: %}
+                <tr>
+                    <td><input type="radio" name="selected" /></td>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.brands.name }}</td>
+                    <td>{{ product.total_quantity }}</td>
+                    <td>{{ product.sale_price }}</td>
+                    <td><input type="checkbox" {% if product.actived==True %} checked {% endif %} /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

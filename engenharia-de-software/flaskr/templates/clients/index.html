@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Lista de Clientes{% endblock %}
+{% block nav %}
+<nav class="navbar">
+    <ul>
+        <li class="navbar__item"><a href="#">Principal</a></li>
+        <li class="navbar__item"><a href="{{ url_for('products.index') }}">Produtos</a></li>
+        <li class="navbar__item"><a href="{{ url_for('orders.index') }}">Pedidos</a></li>
+        <li class="navbar__item selected"><a href="{{ url_for('clients.index') }}">Clientes</a></li>
+        <li class="navbar__item"><a href="#">Financeiro</a></li>
+        <li class="navbar__item"><a href="#">Administrar</a></li>
+    </ul>
+</nav>
+{% endblock %}
+{% block header %}Clientes{% endblock %}
+{% block main %}
+<section class="main-section">
+    <header class="main-section__header">
+        <nav class="main-section__action">
+            <a class="btn-primary" href="{{ url_for('clients.client_add') }}">Adicionar</a>
+            <a class="btn-secondary" href="#">Detalhes</a>
+            <a class="btn-secondary" href="#">Editar</a>
+        </nav>
+        <div class="main-section__search">
+            <div>
+                <input type="search" />
+                <select>
+                    <option>Código</option>
+                    <option>Nome</option>
+                </select>
+                <button>Buscar</button>
+            </div>
+        </div>
+    </header>
+    <div class="main-section__scrollable">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients: %}
+                <tr>
+                    <td><input type="radio" name="selected" /></td>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.first_name }}</td>
+                    <td>{{ client.address }}</td>
+                    <td>{{ client.email }}</td>
+                    <td class="phone">{{ client.phone }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        @font-face {
+            font-family: 'Pacifico';
+            src: url("{{ url_for('static', filename='fonts/Pacifico/Pacifico-Regular.ttf') }}");
+        }
+
+        @font-face {
+            font-family: 'Rubik';
+            src: url("{{ url_for('static', filename='fonts/Rubik/Rubik-Regular.ttf') }}")
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/estilo.css') }}" />
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>Imór Distribuidora</h1>
+        <div class="page-header__icons">
+            <a href="#"><img src="{{ url_for('static', filename='img/speech-bubbles.png') }}" alt="" /></a>
+            <a href="#"><img src="{{ url_for('static', filename='img/bell.png') }}" alt="" /></a>
+            <a href="#"><img class="page-header__perfil" src="{{ url_for('static', filename='img/fred-profile.jpg') }}" alt="" /></a>
+        </div>
+    </header>
+    <div class="container">
+        {% block nav %}{% endblock%}
+        <div class="wrapper-container">
+            <section>
+                <nav class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                    <a href="{{ breadcrumb[1] }}">{{ breadcrumb[0] }}</a>
+                    {% endfor %}
+                </nav>
+                <header>
+                    <h2>{% block header %}{% endblock %}</h2>
+                </header>
+                <main class="main-container">
+                    {% block main %}{% endblock %}
+                </main>
+            </section>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}" ></script>
+
+</body>
+
+</html>
