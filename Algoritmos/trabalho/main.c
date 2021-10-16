@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "cadastro.h"
+
+int geraCodigo(int semente);
+
+typedef struct Conta{
+	char cpf[20], nome[50], sobrenome[50];
+	int numConta;
+	double saldo;
+}conta;
+
+void geraDigito(int *codigo){
+	int i, peso, x = 1000, tmpCod = 0;
+	for(i = 0, peso = 9; i < 4;i++){
+		tmpCod = (*codigo / x) * peso--;
+	}
+	tmpCod %= 11;
+	if(tmpCod > 9) *codigo *= 10;
+	else *codigo = *codigo * 10 + tmpCod;
+}
+
+int cadastraConta(conta usuario){
+	/*A funcao cadastra o usuario e retorna o numero da conta
+	caso tenha algum erro para cadastrar o usuario retorna -1 */
+	int codigo = 0, i, semente;
+	FILE *fila;
+	int tempUser, verificador;
+	fila = fopen("cadastros.txt", "r");
+	if(fila == NULL) return -1;
+	for(i = 0; i < 11; i++)
+		semente += usuario.cpf[i] - '0';
+	/*do{
+		rewind(fila);
+
+		while(verificador != EOF){
+			verificador = fread(&tempUser, sizeof(int), 1, fila);
+			if(codigo == tempUser / 10)
+				break;
+		}
+	}while(verificador != EOF);*/
+	codigo = geraCodigo(semente);
+	if(!codigo) return -1;
+	fclose(fila);
+	rewind(fila);
+	fila = fopen("cadastros.txt", "a+");
+	geraDigito(&codigo);
+	usuario.numConta = codigo;
+	usuario.saldo = 600;
+	fprintf(fila, "%d %s %s %s %.2lf\n", codigo, usuario.nome, usuario.sobrenome
+		, usuario.cpf, usuario.saldo);
+	fclose(fila);
+	return codigo;
+}
+
+int geraCodigo(int semente){
+	srand(semente);
+	return rand()%9999;
+}
+
+int main(void){
+	conta usuario;
+	int verificador;
+	char cpf[20];
+
+	scanf("%[a-z A-Z]s", usuario.nome);
+	getchar();
+	scanf("%[a-z A-Z]s", usuario.sobrenome);
+	getchar();
+	scanf("%[0-9]s", cpf);
+	getchar();
+	verificador = verificaCpf(cpf);
+	printf("%s\n",(verificador)? "CPF valido": "CPF invalido");
+
+	if(verificador){
+		strcpy(usuario.cpf, cpf);
+		verificador = cadastraConta(usuario);
+	}
+	printf("%s\n",(verificador)? "cadastro realizado com sucesso" :
+			"Ocorreu um erro ao tentar cadastrar" );
+
+	return 0;
+}

@@ -1,0 +1,2 @@
+Para compilar deve usar g++ programagram.cpp e para executar no terminal ./a.out, a resposta será escrita
+no arquivo .txt, o arquivo .txt deve ter o nome de vetores.txt

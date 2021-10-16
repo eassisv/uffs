@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+
+*{
+	padding: 0px;
+	margin: 0px;
+}
+
+div#interface-principal{
+	background-color: #2d2b2b;
+}
+
+
+/* Cabeçalho - Inicio*/
+
+header.cabecalho{
+	background-color: #cec8c0;
+	padding: 0px 40px 5px 40px;
+	border-radius: 20px;
+	height: auto;
+	width: 900px;
+	margin: 0px auto 10px auto;
+}
+
+header.cabecalho:out-of-range{
+	position: fixed;
+	top: 0px;
+}
+
+div.logo{
+	padding: 5px;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.logo h1{
+	padding: 10px 50px;
+	font-family: 'Fredoka One', cursive;
+	font-size: 27pt;
+	font-weight: bolder;
+	color: #330f09;
+}
+
+nav.nav-menu{
+	width: 100%;
+	background-color: #845c3c;
+	border-radius: 10px;
+	padding: 5px 0px;
+}
+
+.nav-menu ul.menu{
+	list-style: none;
+	display: flex;
+	justify-content: center;
+}
+
+.nav-menu li{
+	padding: 8px 0px;
+	margin: 0px;
+}
+
+.nav-menu a{
+	text-decoration: none;
+	font-family: 'Fredoka One', cursive;
+	font-size: 14pt;
+	color: #330f09;
+	background-color: #845c3c;
+	padding: 8px 10px;
+	margin: 0px 0px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+.nav-menu a:hover{
+	background-color: #330f09;
+	color: #eeeeee;
+}
+
+.nav-menu h1{
+	display: none;
+}
+
+div.busca{
+	display: flex;
+	justify-content: flex-end;
+}
+
+.busca div{
+	background-color: #330f09;
+	border-radius: 8px;
+	width: 350px;
+	margin: 1px;
+	display: flex;
+	justify-content: center;
+}
+
+.busca input{
+	border-radius: 5px;
+	color: #330f09;
+	padding: 3px;
+	width: 300px;
+	margin: 5px;
+}
+
+/* Cabeçalho - Fim*/
+
+div.corpo{
+	width: 1000px;
+	margin: 10px auto 10px auto;
+	display: flex;
+	justify-content: center;
+}
+
+section.principal{
+	background-color: #cec8c0;
+	border-radius: 15px;
+	height: auto;
+	width: 60%;
+	margin: 0px auto 10px auto;
+}
+
+.principal p{
+	margin: 10px;
+	text-align: justify;
+}
+
+ul.teste{
+	display: flex;
+	justify-content: center;
+	border: 1px solid blue;
+}
+
+li.teste{
+	list-style: none;
+	border: 1px solid green;
+	padding: 10px;
+}
+
+li.teste a{
+	border: 1px solid red;
+	padding: 10px;
+	width: 500px;
+	border-radius: 5px;
+}

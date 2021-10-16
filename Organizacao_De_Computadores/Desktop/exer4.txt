@@ -1,0 +1,1 @@
+4. O código acumula as multiplicaçôes dos números naturais até que esse valor seja maior que o valo lido.
